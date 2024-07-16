@@ -21,12 +21,12 @@ def recentre(vertices):
 
 
 class Simplex:
-	def __init__(self, num_vertices, edge_len):
-		self.vertices = self._find_vertices(num_vertices, edge_len)
+	def __init__(self, dimensions, edge_len):
+		self.vertices = self._find_vertices(dimensions, edge_len)
 
 	def _find_vertices(self, n, edge_len):
 		"""Construct a nice equilateral simplex centred on the origin, with
-		n-1 dimensions"""
+		n dimensions and n+1 vertices"""
 		assert n >= 1
 
 		# Start with a 0D simplex, which is just a point at the origin
@@ -59,9 +59,10 @@ class Simplex:
 		return vertices
 
 	def print(self):
+		print("Simplex with {} vertices".format(len(self.vertices)))
 		for i, v in enumerate(self.vertices):
 			j = (i+1) % len(self.vertices)
-			print(v, norm(self.vertices[j]-v))
+			print(v)
 
 	def find_shared_point(self, indices):
 		"""Our "Venn diagram" consists of a unit sphere at each vertex of the
@@ -80,21 +81,25 @@ class Simplex:
 		if inside != sorted(indices):
 			brk()
 
-		print("{} is inside spheres {}/{} and only inside those ones".format(
+		print("{} is inside and only inside spheres {} ({} vertices)".format(
 			ret, inside, len(self.vertices)))
 		return ret
 
 
-def test(num_vertices, edge_len):
-	s = Simplex(num_vertices, edge_len)
-	for length in range(1, num_vertices):
-		for c in itertools.combinations(range(num_vertices), length):
+def test(dimensions, edge_len=np.sqrt(2)):
+	s = Simplex(dimensions, edge_len)
+	s.print()
+	print()
+
+	for length in range(1, dimensions+1):
+		for c in itertools.combinations(range(dimensions+1), length):
 			s.find_shared_point(c)
+	print()
 
 
 def main():
-	for num_vertices in range(3, 100):
-		test(num_vertices, np.sqrt(2))
+	for dimensions in range(2, 100):
+		test(dimensions, np.sqrt(2))
 
 
 if __name__ == "__main__":
