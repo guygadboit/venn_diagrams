@@ -79,6 +79,12 @@ class Simplex:
 				inside.append(i)
 
 		if inside != sorted(indices):
+			inside_set = set(inside)
+			indices_set = set(indices)
+			if inside_set - indices_set:
+				print("Inside too many spheres")
+			else:
+				print("Not inside enough spheres")
 			brk()
 
 		print("{} is inside and only inside spheres {} ({} vertices)".format(
